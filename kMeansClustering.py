@@ -1,43 +1,37 @@
-
-from __future__ import print_function
-
-from sklearn.decomposition import TruncatedSVD
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.feature_extraction.text import HashingVectorizer
-from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.pipeline import make_pipeline
-from sklearn.preprocessing import Normalizer
-from sklearn import metrics
-
-from sklearn.cluster import KMeans, MiniBatchKMeans
-
-import logging
-from optparse import OptionParser
-import sys
-from time import time
-
-import numpy as np
-
 ###Scraping news headlines and descriptions from NIST's webpage###
-#you can use this guide to scrape data from a webpage: http://docs.python-guide.org/en/latest/scenarios/scrape/
+#you can use this guide to scrape other data from a webpage: http://docs.python-guide.org/en/latest/scenarios/scrape/
 
 from lxml import html
 import requests
 
-page = requests.get('http://www.nist.gov/allnews.cfm?s=01-01-2014&e=12-31-2014')
+print("Retrieving data from NIST")
+
+#retrieve the data from the web page
+page = requests.get('http://www.nist.gov/allnews.cfm?s=01-01-2014&e=12-31-2014') 
+#use html module to parse it out and store in tree
 tree = html.fromstring(page.content)
 
-#list of news headlines and descriptions
-headlines = tree.xpath('//div[@class="select_portal_module_wrapper"]/a/strong/text()')
-descriptions = tree.xpath('//div[@class="select_portal_module_wrapper"]/p/text()')
+#create list of news headlines and descriptions. This required obtaining the XPath of the elements by examining the web page.
+list_of_headlines = tree.xpath('//div[@class="select_portal_module_wrapper"]/a/strong/text()')
+list_of_descriptions = tree.xpath('//div[@class="select_portal_module_wrapper"]/p/text()')
+#combine each headline and description into one value in a list
 news=[]
-for headline in headlines:
-	for description in descriptions:
-		news.append(headline+description)
+for each_headline in list_of_headlines:
+	for each_description in list_of_descriptions:
+		news.append(each_headline+each_description)
+
+print("Last item in list retrieved: %s" % news[-1])
 
 #Convert a collection of raw documents to a matrix of TF-IDF features
+
+from __future__ import print_function
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.cluster import KMeans, MiniBatchKMeans
+from time import time
+
 print("Extracting features from the training dataset using a sparse vectorizer")
 t0 = time()
+#create a sparse word occurrence frequency matrix of the most frequent words
 vectorizer = TfidfVectorizer(input=news, max_df=0.5, min_df=2, stop_words='english')
 X = vectorizer.fit_transform(news) 
 
@@ -52,7 +46,7 @@ km = KMeans(n_clusters=k, init='k-means++', max_iter=100)
 
 print("Clustering sparse data with %s" % km)
 t0 = time()
-km.fit(X)
+km.fit(X) 								#what's happening here??
 print("done in %0.3fs" % (time() - t0))
 print()
 
