@@ -1,6 +1,6 @@
 ###Scraping news headlines and descriptions from NIST's webpage###
 #you can use this guide to scrape other data from a webpage: http://docs.python-guide.org/en/latest/scenarios/scrape/
-
+from __future__ import print_function
 from lxml import html
 import requests
 
@@ -24,7 +24,6 @@ print("Last item in list retrieved: %s" % news[-1])
 
 #Convert a collection of raw documents to a matrix of TF-IDF features
 
-from __future__ import print_function
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from time import time
