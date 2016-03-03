@@ -1,8 +1,8 @@
 # Open Data Day DC
 
 ## Instructors
-Pri Oberoi, Data Scientist, Commerce Data Service <poberoi@doc.gov>,
-Star Ying, Data Scientist, Commerce Data Service <sying@doc.gov>
+* [Pri Oberoi](poberoi@doc.gov), Data Scientist, Commerce Data Service
+* [Star Ying](sying@doc.gov), Data Scientist, Commerce Data Service 
 
 ## Introduction
 This is a quick introduction to data science and short example of topic clustering on [National Institute of Standards and Technology](www.nist.gov) newsfeed.
