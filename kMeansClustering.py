@@ -1,5 +1,7 @@
-###Scraping news headlines and descriptions from NIST's webpage###
+#############################################################
+#Scraping news headlines and descriptions from NIST's webpage
 #you can use this guide to scrape other data from a webpage: http://docs.python-guide.org/en/latest/scenarios/scrape/
+#############################################################
 from __future__ import print_function
 from lxml import html
 import requests
@@ -22,7 +24,9 @@ for each_headline in list_of_headlines:
 
 print("Last item in list retrieved: %s" % news[-1])
 
+#############################################################
 #Convert a collection of raw documents to a matrix of TF-IDF features
+#############################################################
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.cluster import KMeans, MiniBatchKMeans
@@ -32,20 +36,29 @@ print("Extracting features from the training dataset using a sparse vectorizer")
 t0 = time()
 #create a sparse word occurrence frequency matrix of the most frequent words
 vectorizer = TfidfVectorizer(input=news, max_df=0.5, min_df=2, stop_words='english')
+# this calculates the counts 
 X = vectorizer.fit_transform(news) 
+#if you want to look at the feature names, uncomment:
+#print("feature names:")
+#print(vectorizer.get_feature_names())
 
 print("done in %fs" % (time() - t0))
 print("n_samples: %d, n_features: %d" % X.shape)
 print()
 
-###let's do some clustering###
-#number of clusters, which is 15 since NIST has 15 subject areas
+#############################################################
+#let's do some clustering
+#############################################################
+
+#number of clusters = 15, since NIST has 15 subject areas
 k = 15
+#kMeans is passed the number of clusters, k, the method for selecting initial cluster centers, init, and the maximum number of iterations for this run, max_iter
 km = KMeans(n_clusters=k, init='k-means++', max_iter=100)
 
 print("Clustering sparse data with %s" % km)
 t0 = time()
-km.fit(X) 								#what's happening here??
+#compute k means clustering using the fit() method. We are passing kMeans the sparse matrix
+km.fit(X)
 print("done in %0.3fs" % (time() - t0))
 print()
 
